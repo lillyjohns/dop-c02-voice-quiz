@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AWS Certified DevOps Engineer - Professional (DOP-C02) &mdash; Voice Quiz</title>
+<style>
+:root {
+  --bg: #121420; --card: #1e212c; --text: #ebedf2; --mute: #8c919e;
+  --green: #34c759; --red: #b2423c; --accent: #ffbe3c; --border: #2a2e3c;
+}
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body {
+  background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  margin: 0; padding: 0;
+}
+mark.svc { background: rgba(79,163,255,0.25); color: #8fc4ff; border-radius: 3px; padding: 0 2px; font-weight: 600; }
+mark.qual { background: rgba(255,190,60,0.3); color: #ffd77a; border-radius: 3px; padding: 0 2px; font-weight: 700; }
+.topbar {
+  background: #181a24; padding: 14px 20px; display: flex; justify-content: space-between;
+  align-items: center; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 10;
+  flex-wrap: wrap; row-gap: 8px;
+}
+.topbar .title { color: var(--accent); font-weight: 700; font-size: 15px; flex-basis: 100%; order: -1; }
+.topbar .count { color: var(--mute); font-size: 14px; order: 1; }
+.topbar button {
+  background: var(--card); border: 1px solid var(--border); color: var(--text);
+  border-radius: 8px; padding: 6px 10px; font-size: 18px; order: 3;
+}
+.topnav-group { display: flex; gap: 10px; order: 2; margin: 0 auto; }
+.topnav-btn {
+  background: var(--card); border: 1px solid var(--border); color: var(--text);
+  border-radius: 10px; padding: 10px 20px; font-size: 22px; font-weight: 800;
+  min-width: 48px; text-align: center; cursor: pointer;
+}
+.topnav-btn.disabled { opacity: 0.3; pointer-events: none; }
+.wrap { max-width: 760px; margin: 0 auto; padding: 24px 20px 80px; }
+.stem { font-size: 16px; line-height: 1.6; margin: 0 0 24px; white-space: pre-wrap; }
+.choice {
+  display: block; padding: 14px 16px; margin-bottom: 10px; border-radius: 10px;
+  border: 1px solid var(--border); background: var(--card); color: var(--text);
+  cursor: pointer; line-height: 1.5;
+}
+.choice .letter { font-weight: 700; color: var(--mute); margin-right: 8px; }
+.choice.correct { background: rgba(52,199,89,0.14); border-color: var(--green); }
+.choice.correct .letter { color: var(--green); }
+.choice.wrong { background: rgba(178,66,60,0.18); border-color: var(--red); opacity: 0.85; }
+.choice.dim { opacity: 0.45; }
+.badge {
+  display: inline-block; font-weight: 700; padding: 5px 14px; border-radius: 20px; font-size: 14px;
+  margin-bottom: 16px; display: none;
+}
+.badge.correct { background: var(--green); color: #0d1f12; }
+.badge.wrong { background: var(--red); color: #fff; }
+.badge.show { display: inline-block; }
+.flagbadge {
+  display: inline-block; background: var(--accent); color: #1a1304; font-weight: 700;
+  padding: 4px 12px; border-radius: 20px; font-size: 12px; margin-left: 8px;
+}
+.bullets { margin: 16px 0; padding-left: 0; list-style: none; display: none; }
+.bullets.show { display: block; }
+.bullets li {
+  background: var(--card); border: 1px solid var(--border); border-left: 3px solid var(--accent);
+  border-radius: 6px; padding: 10px 14px; margin-bottom: 8px; font-size: 14px; color: #dfe2ea;
+}
+#startOverlay {
+  position: fixed; inset: 0; background: var(--bg); display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 20px; z-index: 100; text-align: center; padding: 20px;
+}
+#startOverlay h1 { color: var(--accent); font-size: 20px; margin: 0; }
+#startOverlay p { color: var(--mute); font-size: 14px; margin: 0; max-width: 300px; }
+#startBtn {
+  background: var(--accent); color: #1a1304; font-weight: 800; font-size: 17px;
+  padding: 16px 36px; border-radius: 14px; border: none; cursor: pointer;
+}
+#qList { text-align: left; }
+#qList .qitem {
+  display: flex; justify-content: space-between; align-items: center; gap: 8px;
+  padding: 10px 14px; border-radius: 8px; background: var(--card); border: 1px solid var(--border);
+  color: var(--text); margin-bottom: 6px; font-size: 13px; cursor: pointer; text-align: left;
+}
+#qList .qitem .qnum { color: var(--accent); font-weight: 700; flex-shrink: 0; }
+#qList .qitem .qpreview { color: var(--mute); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+</style>
+</head>
+<body>
+
+<div id="startOverlay">
+  <h1>AWS Certified DevOps Engineer - Professional (DOP-C02)</h1>
+  <p>5 questions &middot; voice-over enabled<br>Tap Start once to enable audio for the whole session</p>
+  <button id="startBtn" onclick="startQuiz()">&#9654; Start</button>
+  <div id="qList" style="width:100%; max-width:400px; max-height:50vh; overflow-y:auto; margin-top:10px;"></div>
+</div>
+
+<div id="app" style="display:none;">
+  <div class="topbar">
+    <div class="title">AWS Certified DevOps Engineer - Professional (DOP-C02)</div>
+    <div class="count" id="qCount"></div>
+    <div class="topnav-group">
+      <span class="topnav-btn" id="homeBtn" onclick="goHome()">&#8962;</span>
+      <span class="topnav-btn" id="prevBtn" onclick="prevQuestion()">&larr;</span>
+      <span class="topnav-btn" id="nextBtn" onclick="nextQuestion()">&rarr;</span>
+    </div>
+    <button id="playBtn" onclick="togglePlay()">&#10073;&#10073;</button>
+    <button id="restartBtn" onclick="restartNarration()">&#8634;</button>
+    <button id="speedBtn" onclick="cycleSpeed()">1x</button>
+  </div>
+  <div class="wrap">
+    <div class="stem" id="stemText"></div>
+    <div id="badge" class="badge"></div>
+    <div id="choicesWrap"></div>
+    <ul id="bullets" class="bullets"></ul>
+  </div>
+</div>
+
+<audio id="pMain" preload="auto"></audio>
+<audio id="pCorrect" preload="auto"></audio>
+<audio id="pWrong" preload="auto"></audio>
+
+<script>
+const QUESTIONS = [{"num": 1, "stem": "A company has a mobile application that makes HTTP API calls to an <mark class=\"svc\">Application Load Balancer</mark> (ALB). The ALB routes requests to an <mark class=\"svc\">AWS Lambda</mark> function. Many different versions of the application are in use at any given time, including versions that are in testing by a subset of users. The version of the application is defined in the user-agent header that is sent with all requests to the API. After a series of recent changes to the API, the company has observed issues with the application. The company needs to gather a metric for each API operation by response code for each version of the application that is in use. A DevOps engineer has modified the Lambda function to extract the API operation name, version information from the user-agent header and response code. Which additional set of actions should the DevOps engineer take to gather the required metrics?", "preview": "A company has a mobile application that makes HTTP API calls to an App", "choices": [{"letter": "A", "text": "Modify the Lambda function to write the API operation name, response code, and version number as a log line to an <mark class=\"svc\"><mark class=\"svc\">Amazon CloudWatch</mark> Logs</mark> log group. Configure a CloudWatch Logs <mark class=\"svc\">metric filter</mark> that increments a metric for each API operation name. Specify response code and application version as dimensions for the metric.", "plain": "Modify the Lambda function to write the API operation name, response code, and version number as a log line to an Amazon CloudWatch Logs log group. Configure a CloudWatch Logs metric filter that increments a metric for each API operation name. Specify response code and application version as dimensions for the metric."}, {"letter": "B", "text": "Modify the Lambda function to write the API operation name, response code, and version number as a log line to an <mark class=\"svc\"><mark class=\"svc\">Amazon CloudWatch</mark> Logs</mark> log group. Configure a CloudWatch Logs Insights query to populate CloudWatch metrics from the log lines. Specify response code and application version as dimensions for the metric.", "plain": "Modify the Lambda function to write the API operation name, response code, and version number as a log line to an Amazon CloudWatch Logs log group. Configure a CloudWatch Logs Insights query to populate CloudWatch metrics from the log lines. Specify response code and application version as dimensions for the metric."}, {"letter": "C", "text": "Configure the ALB access logs to write to an <mark class=\"svc\"><mark class=\"svc\">Amazon CloudWatch</mark> Logs</mark> log group. Modify the Lambda function to respond to the ALB with the API operation name, response code, and version number as response metadata. Configure a CloudWatch Logs <mark class=\"svc\">metric filter</mark> that increments a metric for each API operation name. Specify response code and application version as dimensions for the metric.", "plain": "Configure the ALB access logs to write to an Amazon CloudWatch Logs log group. Modify the Lambda function to respond to the ALB with the API operation name, response code, and version number as response metadata. Configure a CloudWatch Logs metric filter that increments a metric for each API operation name. Specify response code and application version as dimensions for the metric."}, {"letter": "D", "text": "Configure <mark class=\"svc\">AWS X-Ray</mark> integration on the Lambda function. Modify the Lambda function to create an X-Ray subsegment with the API operation name, response code, and version number. Configure X-Ray insights to extract an aggregated metric for each API operation name and to publish the metric to <mark class=\"svc\">Amazon CloudWatch</mark>. Specify response code and application version as dimensions for the metric.", "plain": "Configure AWS X-Ray integration on the Lambda function. Modify the Lambda function to create an X-Ray subsegment with the API operation name, response code, and version number. Configure X-Ray insights to extract an aggregated metric for each API operation name and to publish the metric to Amazon CloudWatch. Specify response code and application version as dimensions for the metric."}], "correct": "A", "bullets": ["Metric filters turn log lines into CloudWatch metrics directly", "Use response code and version as metric dimensions"], "flag": false}, {"num": 2, "stem": "A company provides an application to customers. The application has an <mark class=\"svc\">Amazon API Gateway</mark> REST API that invokes an <mark class=\"svc\">AWS Lambda</mark> function. On initialization, the Lambda function loads a large amount of data from an <mark class=\"svc\">Amazon DynamoDB</mark> table. The data load process results in long cold-start times of 8-10 seconds. The DynamoDB table has DynamoDB Accelerator (<mark class=\"svc\">DAX</mark>) configured. Customers report that the application intermittently takes a long time to respond to requests. The application receives thousands of requests throughout the day. In the middle of the day, the application experiences 10 times more requests than at any other time of the day. Near the end of the day, the application&#x27;s request volume decreases to 10% of its normal total. A DevOps engineer needs to reduce the latency of the Lambda function at all times of the day. Which solution will meet these requirements?", "preview": "A company provides an application to customers. The application has an", "choices": [{"letter": "A", "text": "Configure <mark class=\"svc\">provisioned concurrency</mark> on the Lambda function with a concurrency value of 1. Delete the <mark class=\"svc\">DAX</mark> cluster for the DynamoDB table.", "plain": "Configure provisioned concurrency on the Lambda function with a concurrency value of 1. Delete the DAX cluster for the DynamoDB table."}, {"letter": "B", "text": "Configure <mark class=\"svc\">reserved concurrency</mark> on the Lambda function with a concurrency value of 0.", "plain": "Configure reserved concurrency on the Lambda function with a concurrency value of 0."}, {"letter": "C", "text": "Configure <mark class=\"svc\">provisioned concurrency</mark> on the Lambda function. Configure AWS Application Auto Scaling on the Lambda function with <mark class=\"svc\">provisioned concurrency</mark> values set to a minimum of 1 and a maximum of 100.", "plain": "Configure provisioned concurrency on the Lambda function. Configure AWS Application Auto Scaling on the Lambda function with provisioned concurrency values set to a minimum of 1 and a maximum of 100."}, {"letter": "D", "text": "Configure <mark class=\"svc\">reserved concurrency</mark> on the Lambda function. Configure AWS Application Auto Scaling on the API Gateway API with a <mark class=\"svc\">reserved concurrency</mark> maximum value of 100.", "plain": "Configure reserved concurrency on the Lambda function. Configure AWS Application Auto Scaling on the API Gateway API with a reserved concurrency maximum value of 100."}], "correct": "C", "bullets": ["Provisioned concurrency eliminates cold starts", "Application Auto Scaling adjusts it automatically with traffic"], "flag": false}, {"num": 3, "stem": "A company is adopting <mark class=\"svc\">AWS CodeDeploy</mark> to automate its application deployments for a Java-Apache Tomcat application with an Apache Webserver. The development team started with a proof of concept, created a deployment group for a developer environment, and performed functional tests within the application. After completion, the team will create additional deployment groups for staging and production. The current log level is configured within the Apache settings, but the team wants to change this configuration dynamically when the deployment occurs, so that they can set different log level configurations depending on the deployment group without having a different application revision for each group. How can these requirements be met with the <mark class=\"qual\">LEAST</mark> management overhead and without requiring different script versions for each deployment group?", "preview": "A company is adopting AWS CodeDeploy to automate its application deplo", "choices": [{"letter": "A", "text": "Tag the <mark class=\"svc\">Amazon EC2</mark> instances depending on the deployment group. Then place a script into the application revision that calls the metadata service and the EC2 API to identify which deployment group the instance is part of. Use this information to configure the log level settings. Reference the script as part of the AfterInstall lifecycle hook in the appspec.yml file.", "plain": "Tag the Amazon EC2 instances depending on the deployment group. Then place a script into the application revision that calls the metadata service and the EC2 API to identify which deployment group the instance is part of. Use this information to configure the log level settings. Reference the script as part of the AfterInstall lifecycle hook in the appspec.yml file."}, {"letter": "B", "text": "Create a script that uses the CodeDeploy environment variable DEPLOYMENT_GROUP_ NAME to identify which deployment group the instance is part of. Use this information to configure the log level settings. Reference this script as part of the BeforeInstall lifecycle hook in the appspec.yml file.", "plain": "Create a script that uses the CodeDeploy environment variable DEPLOYMENT_GROUP_ NAME to identify which deployment group the instance is part of. Use this information to configure the log level settings. Reference this script as part of the BeforeInstall lifecycle hook in the appspec.yml file."}, {"letter": "C", "text": "Create a CodeDeploy custom environment variable for each environment. Then place a script into the application revision that checks this environment variable to identify which deployment group the instance is part of. Use this information to configure the log level settings. Reference this script as part of the ValidateService lifecycle hook in the appspec.yml file.", "plain": "Create a CodeDeploy custom environment variable for each environment. Then place a script into the application revision that checks this environment variable to identify which deployment group the instance is part of. Use this information to configure the log level settings. Reference this script as part of the ValidateService lifecycle hook in the appspec.yml file."}, {"letter": "D", "text": "Create a script that uses the CodeDeploy environment variable DEPLOYMENT_GROUP_ID to identify which deployment group the instance is part of to configure the log level settings. Reference this script as part of the Install lifecycle hook in the appspec.yml file.", "plain": "Create a script that uses the CodeDeploy environment variable DEPLOYMENT_GROUP_ID to identify which deployment group the instance is part of to configure the log level settings. Reference this script as part of the Install lifecycle hook in the appspec.yml file."}], "correct": "B", "bullets": ["CodeDeploy auto-provides DEPLOYMENT_GROUP_NAME as an env variable", "BeforeInstall runs early enough to set config before app starts"], "flag": false}, {"num": 4, "stem": "A company requires its developers to tag all Amazon Elastic Block Store (<mark class=\"svc\">Amazon EBS</mark>) volumes in an account to indicate a desired backup frequency. This requirement Includes EBS volumes that do not require backups. The company uses custom tags named Backup_Frequency that have values of none, dally, or weekly that correspond to the desired backup frequency. An audit finds that developers are occasionally not tagging the EBS volumes. A DevOps engineer needs to ensure that all EBS volumes always have the Backup_Frequency tag so that the company can perform backups at <mark class=\"qual\">least</mark> weekly unless a different value is specified. Which solution will meet these requirements?", "preview": "A company requires its developers to tag all Amazon Elastic Block Stor", "choices": [{"letter": "A", "text": "Set up <mark class=\"svc\">AWS Config</mark> in the account. Create a custom rule that returns a compliance failure for all <mark class=\"svc\">Amazon EC2</mark> resources that do not have a Backup Frequency tag applied. Configure a remediation action that uses a custom <mark class=\"svc\">AWS Systems Manager</mark> Automation runbook to apply the Backup_Frequency tag with a value of weekly.", "plain": "Set up AWS Config in the account. Create a custom rule that returns a compliance failure for all Amazon EC2 resources that do not have a Backup Frequency tag applied. Configure a remediation action that uses a custom AWS Systems Manager Automation runbook to apply the Backup_Frequency tag with a value of weekly."}, {"letter": "B", "text": "Set up <mark class=\"svc\">AWS Config</mark> in the account. Use a managed rule that returns a compliance failure for EC2::Volume resources that do not have a Backup Frequency tag applied. Configure a remediation action that uses a custom <mark class=\"svc\">AWS Systems Manager</mark> Automation runbook to apply the Backup_Frequency tag with a value of weekly.", "plain": "Set up AWS Config in the account. Use a managed rule that returns a compliance failure for EC2::Volume resources that do not have a Backup Frequency tag applied. Configure a remediation action that uses a custom AWS Systems Manager Automation runbook to apply the Backup_Frequency tag with a value of weekly."}, {"letter": "C", "text": "Turn on <mark class=\"svc\">AWS CloudTrail</mark> in the account. Create an <mark class=\"svc\">Amazon EventBridge</mark> rule that reacts to EBS CreateVolume events. Configure a custom <mark class=\"svc\">AWS Systems Manager</mark> Automation runbook to apply the Backup_Frequency tag with a value of weekly. Specify the runbook as the target of the rule.", "plain": "Turn on AWS CloudTrail in the account. Create an Amazon EventBridge rule that reacts to EBS CreateVolume events. Configure a custom AWS Systems Manager Automation runbook to apply the Backup_Frequency tag with a value of weekly. Specify the runbook as the target of the rule."}, {"letter": "D", "text": "Turn on <mark class=\"svc\">AWS CloudTrail</mark> in the account. Create an <mark class=\"svc\">Amazon EventBridge</mark> rule that reacts to EBS CreateVolume events or EBS ModifyVolume events. Configure a custom <mark class=\"svc\">AWS Systems Manager</mark> Automation runbook to apply the Backup_Frequency tag with a value of weekly. Specify the runbook as the target of the rule.", "plain": "Turn on AWS CloudTrail in the account. Create an Amazon EventBridge rule that reacts to EBS CreateVolume events or EBS ModifyVolume events. Configure a custom AWS Systems Manager Automation runbook to apply the Backup_Frequency tag with a value of weekly. Specify the runbook as the target of the rule."}], "correct": "B", "bullets": ["AWS Config managed rules exist for required-tag checks", "Remediation runbooks can auto-apply missing tags"], "flag": false}, {"num": 5, "stem": "A company is using an <mark class=\"svc\">Amazon Aurora</mark> cluster as the data store for its application. The Aurora cluster is configured with a single DB instance. The application performs read and write operations on the database by using the cluster&#x27;s instance endpoint. The company has scheduled an update to be applied to the cluster during an upcoming maintenance window. The cluster must remain available with the <mark class=\"qual\">least</mark> possible interruption during the maintenance window. What should a DevOps engineer do to meet these requirements?", "preview": "A company is using an Amazon Aurora cluster as the data store for its ", "choices": [{"letter": "A", "text": "Add a reader instance to the Aurora cluster. Update the application to use the Aurora <mark class=\"svc\">cluster endpoint</mark> for write operations. Update the Aurora cluster&#x27;s <mark class=\"svc\">reader endpoint</mark> for reads.", "plain": "Add a reader instance to the Aurora cluster. Update the application to use the Aurora cluster endpoint for write operations. Update the Aurora cluster's reader endpoint for reads."}, {"letter": "B", "text": "Add a reader instance to the Aurora cluster. Create a custom ANY endpoint for the cluster. Update the application to use the Aurora cluster&#x27;s custom ANY endpoint for read and write operations.", "plain": "Add a reader instance to the Aurora cluster. Create a custom ANY endpoint for the cluster. Update the application to use the Aurora cluster's custom ANY endpoint for read and write operations."}, {"letter": "C", "text": "Turn on the <mark class=\"svc\">Multi-AZ</mark> option on the Aurora cluster. Update the application to use the Aurora <mark class=\"svc\">cluster endpoint</mark> for write operations. Update the Aurora cluster\u2019s <mark class=\"svc\">reader endpoint</mark> for reads.", "plain": "Turn on the Multi-AZ option on the Aurora cluster. Update the application to use the Aurora cluster endpoint for write operations. Update the Aurora cluster\u2019s reader endpoint for reads."}, {"letter": "D", "text": "Turn on the <mark class=\"svc\">Multi-AZ</mark> option on the Aurora cluster. Create a custom ANY endpoint for the cluster. Update the application to use the Aurora cluster&#x27;s custom ANY endpoint for read and write operations", "plain": "Turn on the Multi-AZ option on the Aurora cluster. Create a custom ANY endpoint for the cluster. Update the application to use the Aurora cluster's custom ANY endpoint for read and write operations"}], "correct": "A", "bullets": ["Aurora clusters use cluster and reader endpoints, not an RDS-style Multi-AZ toggle", "Adding a reader instance allows rolling updates with minimal write downtime"], "flag": false}];
+const TOTAL = QUESTIONS.length;
+let idx = 0;
+let answered = false;
+const SPEEDS = [1, 1.25, 1.5, 2];
+let speedIdx = parseInt(localStorage.getItem('quizSpeedIdx') || '0', 10);
+
+const main = document.getElementById('pMain');
+const pCorrect = document.getElementById('pCorrect');
+const pWrong = document.getElementById('pWrong');
+
+function applySpeed() {
+  const rate = SPEEDS[speedIdx];
+  main.playbackRate = rate;
+  pCorrect.playbackRate = rate;
+  pWrong.playbackRate = rate;
+  document.getElementById('speedBtn').textContent = rate + 'x';
+}
+function cycleSpeed() {
+  speedIdx = (speedIdx + 1) % SPEEDS.length;
+  localStorage.setItem('quizSpeedIdx', speedIdx);
+  applySpeed();
+}
+
+function setPlayIcon(showPlay) {
+  document.getElementById('playBtn').innerHTML = showPlay ? '&#9654;' : '&#10073;&#10073;';
+}
+function togglePlay() {
+  if (main.paused) { main.play().catch(()=>{}); setPlayIcon(false); }
+  else { main.pause(); setPlayIcon(true); }
+}
+function restartNarration() {
+  main.currentTime = 0;
+  main.play().catch(()=>{});
+  setPlayIcon(false);
+}
+main.addEventListener('play', () => setPlayIcon(false));
+main.addEventListener('pause', () => setPlayIcon(true));
+main.addEventListener('ended', function() {
+  if (!answered) revealAnswer(null);
+});
+
+function startQuiz() {
+  document.getElementById('startOverlay').style.display = 'none';
+  document.getElementById('app').style.display = '';
+  applySpeed();
+  try { main.play().catch(()=>{}); } catch(e) {}
+  renderQuestion();
+}
+function startQuizAt(i) {
+  idx = i;
+  startQuiz();
+}
+function goHome() {
+  main.pause();
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('startOverlay').style.display = '';
+}
+function escapeHtml(s) {
+  const d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
+}
+function buildQList() {
+  const el = document.getElementById('qList');
+  el.innerHTML = QUESTIONS.map((q, i) => {
+    const preview = (q.preview || '').slice(0, 50);
+    return `<div class="qitem" onclick="startQuizAt(${i})"><span class="qnum">#${q.num}</span><span class="qpreview">${escapeHtml(preview)}</span></div>`;
+  }).join('');
+}
+buildQList();
+
+function renderQuestion() {
+  answered = false;
+  const q = QUESTIONS[idx];
+  document.getElementById('qCount').textContent = `Q ${idx + 1}/${TOTAL}`;
+  document.getElementById('stemText').innerHTML = q.stem;
+  document.getElementById('prevBtn').classList.toggle('disabled', idx === 0);
+  document.getElementById('nextBtn').innerHTML = (idx === TOTAL - 1) ? '&#10003;' : '&rarr;';
+
+  const badge = document.getElementById('badge');
+  badge.className = 'badge';
+  badge.innerHTML = '';
+
+  const bulletsEl = document.getElementById('bullets');
+  bulletsEl.className = 'bullets';
+  bulletsEl.innerHTML = q.bullets.map(b => `<li>${escapeHtml(b)}</li>`).join('');
+
+  const wrap = document.getElementById('choicesWrap');
+  wrap.innerHTML = '';
+  q.choices.forEach(c => {
+    const div = document.createElement('div');
+    div.className = 'choice';
+    div.id = 'c_' + c.letter;
+    div.innerHTML = `<span class="letter">${c.letter}.</span>${c.text}`;
+    div.onclick = () => pick(c.letter);
+    wrap.appendChild(div);
+  });
+
+  main.src = `audio_last100/q${q.num}_ask.mp3`;
+  pWrong.src = `audio_last100/q${q.num}_wrong.mp3`;
+  try { main.play().catch(()=>{}); } catch(e) {}
+  applySpeed();
+}
+
+function goNext() {
+  if (idx >= TOTAL - 1) return;
+  idx++;
+  renderQuestion();
+}
+function nextQuestion() {
+  if (idx >= TOTAL - 1) return;
+  idx++;
+  renderQuestion();
+}
+function prevQuestion() {
+  if (idx === 0) return;
+  idx--;
+  renderQuestion();
+}
+
+function revealAnswer(pickedLetter) {
+  if (answered) return;
+  answered = true;
+  main.pause();
+  const q = QUESTIONS[idx];
+  const isCorrect = pickedLetter !== null && q.correct.includes(pickedLetter);
+  document.querySelectorAll('.choice').forEach(el => {
+    const l = el.id.replace('c_', '');
+    if (q.correct.includes(l)) el.classList.add('correct');
+    else if (l === pickedLetter) el.classList.add('wrong');
+    else el.classList.add('dim');
+  });
+  const badge = document.getElementById('badge');
+  badge.classList.add('show', isCorrect ? 'correct' : 'wrong');
+  let badgeHtml = (isCorrect ? 'Correct!' : ('Answer: ' + q.correct));
+  if (q.flag) badgeHtml += ' <span class="flagbadge">Differs from source key</span>';
+  badge.innerHTML = badgeHtml;
+  if (isCorrect) {
+    pCorrect.currentTime = 0;
+    pCorrect.playbackRate = SPEEDS[speedIdx];
+    pCorrect.onended = goNext;
+    pCorrect.play().catch(goNext);
+  } else {
+    document.getElementById('bullets').classList.add('show');
+    pWrong.currentTime = 0;
+    pWrong.playbackRate = SPEEDS[speedIdx];
+    pWrong.onended = goNext;
+    pWrong.play().catch(goNext);
+  }
+}
+function pick(letter) { revealAnswer(letter); }
+</script>
+</body>
+</html>
