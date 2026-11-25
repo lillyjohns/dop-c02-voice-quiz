@@ -266,13 +266,13 @@ function revealAnswer(pickedLetter) {
   let badgeHtml = (isCorrect ? 'Correct!' : ('Answer: ' + q.correct));
   if (q.flag) badgeHtml += ' <span class="flagbadge">Differs from source key</span>';
   badge.innerHTML = badgeHtml;
+  document.getElementById('bullets').classList.add('show');
   if (isCorrect) {
     pCorrect.currentTime = 0;
     pCorrect.playbackRate = SPEEDS[speedIdx];
-    pCorrect.onended = goNext;
-    pCorrect.play().catch(goNext);
+    pCorrect.onended = null;
+    pCorrect.play().catch(() => {});
   } else {
-    document.getElementById('bullets').classList.add('show');
     pWrong.currentTime = 0;
     pWrong.playbackRate = SPEEDS[speedIdx];
     pWrong.onended = null;
