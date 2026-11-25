@@ -275,8 +275,8 @@ function revealAnswer(pickedLetter) {
     document.getElementById('bullets').classList.add('show');
     pWrong.currentTime = 0;
     pWrong.playbackRate = SPEEDS[speedIdx];
-    pWrong.onended = goNext;
-    pWrong.play().catch(goNext);
+    pWrong.onended = null;
+    pWrong.play().catch(() => {});
   }
 }
 function pick(letter) { revealAnswer(letter); }
