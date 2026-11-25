@@ -63,6 +63,12 @@ mark.qual { background: rgba(255,190,60,0.3); color: #ffd77a; border-radius: 3px
   background: var(--card); border: 1px solid var(--border); border-left: 3px solid var(--accent);
   border-radius: 6px; padding: 10px 14px; margin-bottom: 8px; font-size: 14px; color: #dfe2ea;
 }
+.showAnswerBtn {
+  display: block; width: 100%; margin: 4px 0 18px; padding: 12px 16px; border-radius: 10px;
+  border: 1px dashed var(--accent); background: transparent; color: var(--accent);
+  font-weight: 700; font-size: 14px; cursor: pointer;
+}
+.showAnswerBtn.hidden { display: none; }
 #startOverlay {
   position: fixed; inset: 0; background: var(--bg); display: flex; flex-direction: column;
   align-items: center; justify-content: center; gap: 20px; z-index: 100; text-align: center; padding: 20px;
@@ -109,6 +115,7 @@ mark.qual { background: rgba(255,190,60,0.3); color: #ffd77a; border-radius: 3px
     <div class="stem" id="stemText"></div>
     <div id="badge" class="badge"></div>
     <div id="choicesWrap"></div>
+    <button id="showAnswerBtn" class="showAnswerBtn" onclick="showAnswer()">Show Answer &amp; Key Points</button>
     <ul id="bullets" class="bullets"></ul>
   </div>
 </div>
@@ -202,6 +209,8 @@ function renderQuestion() {
   badge.className = 'badge';
   badge.innerHTML = '';
 
+  document.getElementById('showAnswerBtn').classList.remove('hidden');
+
   const bulletsEl = document.getElementById('bullets');
   bulletsEl.className = 'bullets';
   bulletsEl.innerHTML = q.bullets.map(b => `<li>${escapeHtml(b)}</li>`).join('');
@@ -251,6 +260,7 @@ function revealAnswer(pickedLetter) {
     else if (l === pickedLetter) el.classList.add('wrong');
     else el.classList.add('dim');
   });
+  document.getElementById('showAnswerBtn').classList.add('hidden');
   const badge = document.getElementById('badge');
   badge.classList.add('show', isCorrect ? 'correct' : 'wrong');
   let badgeHtml = (isCorrect ? 'Correct!' : ('Answer: ' + q.correct));
@@ -270,6 +280,25 @@ function revealAnswer(pickedLetter) {
   }
 }
 function pick(letter) { revealAnswer(letter); }
+
+function showAnswer() {
+  if (answered) return;
+  answered = true;
+  main.pause();
+  const q = QUESTIONS[idx];
+  document.querySelectorAll('.choice').forEach(el => {
+    const l = el.id.replace('c_', '');
+    if (q.correct.includes(l)) el.classList.add('correct');
+    else el.classList.add('dim');
+  });
+  const badge = document.getElementById('badge');
+  badge.classList.add('show', 'correct');
+  let badgeHtml = 'Answer: ' + q.correct;
+  if (q.flag) badgeHtml += ' <span class="flagbadge">Differs from source key</span>';
+  badge.innerHTML = badgeHtml;
+  document.getElementById('bullets').classList.add('show');
+  document.getElementById('showAnswerBtn').classList.add('hidden');
+}
 </script>
 </body>
 </html>
